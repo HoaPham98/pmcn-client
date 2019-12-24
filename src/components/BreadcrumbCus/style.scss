@@ -1,0 +1,12 @@
+.breadcrumb-cus {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  min-height: 6rem;
+  background-color: #f7f7f7;
+
+  .ant-breadcrumb {
+    grid-column: 3/15;
+    display: flex;
+    align-items: center;
+  }
+}

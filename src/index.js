@@ -1,23 +1,37 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import './index.css';
-import { Provider as AlertProvider } from 'react-alert'
-import AlertTemplate from 'react-alert-template-basic'
-import App from './App'
-import registerServiceWorker from './registerServiceWorker';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import * as serviceWorker from './serviceWorker';
+import './index.scss';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { CookiesProvider } from 'react-cookie';
+import { PlatformProvider } from './context/platform';
+import App from './components/App';
+import rootReducer from './reducers';
+import router from './routes';
+import thunk from 'redux-thunk';
 
-const options = {
-    timeout: 5000
-}
-class Root extends Component {
-    render() {
-        return (
-            <AlertProvider template={AlertTemplate} {...options}>
-                <App />
-            </AlertProvider>
-        )
-    }
-}
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
-render(<Root />, document.getElementById('root'))
-registerServiceWorker();
+const render = () => {
+  const userAgent = navigator.userAgent;
+
+  const app = (
+    <BrowserRouter>
+      <Provider store={store}>
+        <CookiesProvider>
+          <PlatformProvider userAgent={userAgent}>
+            <App>{router()}</App>
+          </PlatformProvider>
+        </CookiesProvider>
+      </Provider>
+    </BrowserRouter>
+  );
+
+  ReactDOM.render(app, document.getElementById('root'));
+};
+
+render();
+
+serviceWorker.unregister();
