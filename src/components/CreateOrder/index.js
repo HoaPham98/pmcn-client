@@ -131,7 +131,7 @@ class NormalCreateOrderForm extends React.Component {
           </Button>
           </Link>
           <Divider type='vertical' />
-          <Link to="/dashboard">
+          <Link to="/pre_payment">
             <Button
               type="primary"
               htmlType="submit"
