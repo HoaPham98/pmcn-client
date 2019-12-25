@@ -1,0 +1,40 @@
+.order {
+  flex-grow: 1;
+  background-color: #ebebeb;
+
+  .order-content {
+    width: 70%;
+    margin: auto;
+
+
+    > h1 {
+      background-color: #33abe5;
+      margin-top: 4rem;
+      text-align: center;
+      color: #f5fbfe;
+      padding: 1rem;
+      margin-bottom: 0;
+      font-size: 3rem;
+    }
+
+    > h3 {
+      margin-top: 1rem;
+      text-align: center;
+      color: #000000;
+      padding: 1rem;
+      margin-bottom: 0;
+      font-size: 2rem;
+    }
+    .order-wrapped-list {
+      background-color: #fff;
+      padding-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+}
+
+.back-table {
+  margin: 1rem;
+  background: #ffffff;
+}
