@@ -10,15 +10,26 @@ const Tables = Loadable({
   loading: Loading,
 });
 
+const Chef = Loadable({
+  loader: () => import('../pages/Chef'),
+  loading: Loading,
+});
+
 const routes = [
   {
     path: '/',
     component: Tables,
   },
   {
+    path: '/chef',
+    component: Chef,
+  },
+  {
     path: '*',
     component: () => <div>404!</div>,
-  },
+  }
+  
+
 ];
 
 export default () => (
