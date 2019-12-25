@@ -10,7 +10,16 @@ const Tables = Loadable({
   loading: Loading,
 });
 
+const Login = Loadable({
+  loader: () => import('../pages/Login'),
+  loading: Loading,
+})
+
 const routes = [
+  {
+    path: '/login',
+    component: Login,
+  },
   {
     path: '/',
     component: Tables,

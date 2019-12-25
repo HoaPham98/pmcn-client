@@ -1,0 +1,31 @@
+.login {
+  flex-grow: 1;
+  background-color: #ebebeb;
+
+  .login-content {
+    width: 70%;
+    margin: auto;
+
+    > h1 {
+      background-color: #33abe5;
+      margin-top: 4rem;
+      text-align: center;
+      color: #f5fbfe;
+      padding: 1rem;
+      margin-bottom: 0;
+      font-size: 3rem;
+    }
+
+    .login-wrapped-list {
+      background-color: #fff;
+      padding-top: 2rem;
+      flex-grow: 1;
+      margin: auto;
+
+      .login-form {
+        width: 80%;
+        align-content: space-between;
+      }
+    }
+  }
+}
