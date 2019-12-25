@@ -10,7 +10,6 @@ const Tables = Loadable({
   loading: Loading,
 });
 
-
 const Login = Loadable({
   loader: () => import('../pages/Login'),
   loading: Loading,
@@ -25,6 +24,11 @@ const Pre_payment = Loadable({
   loader: () => import('../pages/Pre_payment'),
   loading: Loading,
 })
+const Payment = Loadable({
+  loader: () => import('../pages/Payment'),
+  loading: Loading,
+});
+
 
 const routes = [
   {
@@ -46,9 +50,14 @@ const routes = [
     component: Pre_payment,
   },
   {
+    path: '/payment',
+    component: Payment,
+  },
+  {
     path: '*',
     component: () => <div>404!</div>,
   },
+
 ];
 
 export default () => (

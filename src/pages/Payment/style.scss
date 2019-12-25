@@ -1,8 +1,8 @@
-.tables {
+.payment {
   flex-grow: 1;
-  background-color: #ebebeb;
+  background-color: white;
 
-  .tables-content {
+  .payment-content {
     width: 70%;
     margin: auto;
 
@@ -16,7 +16,7 @@
       font-size: 3rem;
     }
 
-    .tables-wrapped-list {
+    .payment-wrapped-list {
       background-color: #fff;
       padding-top: 2rem;
       display: grid;
@@ -24,6 +24,3 @@
     }
   }
 }
-
-
-
