@@ -1,0 +1,30 @@
+.chef {
+    flex-grow: 1;
+    background-color: #ebebeb;
+  
+    .chef-content {
+      width: 70%;
+      margin: auto;
+  
+      > h1 {
+        background-color: #33abe5;
+        margin-top: 4rem;
+        text-align: center;
+    
+        padding: 1rem;
+        margin-bottom: 0;
+        font-size: 3rem;
+      }
+  
+      .chef-wrapped-list {
+        background-color: #fff;
+        padding-top: 2rem;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+  }
+  .table-color{
+      background-color:  #fff;
+  }
+  

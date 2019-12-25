@@ -29,6 +29,10 @@ const Payment = Loadable({
   loading: Loading,
 });
 
+const Chef = Loadable({
+  loader: () => import('../pages/Chef'),
+  loading: Loading,
+});
 
 const routes = [
   {
@@ -52,6 +56,10 @@ const routes = [
   {
     path: '/payment',
     component: Payment,
+  },
+  {
+    path: '/chef',
+    component: Chef,
   },
   {
     path: '*',
