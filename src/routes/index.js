@@ -15,6 +15,11 @@ const Order = Loadable({
   loading: Loading,
 })
 
+const Pre_payment = Loadable({
+  loader: () => import('../pages/Pre_payment'),
+  loading: Loading,
+})
+
 const routes = [
   {
     path: '/',
@@ -23,6 +28,10 @@ const routes = [
   {
     path: '/order',
     component: Order,
+  },
+  {
+    path: '/pre_payment',
+    component: Pre_payment,
   },
   {
     path: '*',
