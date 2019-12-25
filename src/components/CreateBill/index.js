@@ -25,16 +25,13 @@ class NormalLoginForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        const tables = values['select-multiple']
         this.setState({loading : true})
-        services.login(values.email, values.password)
+        services.createBills(tables)
           .then(
             res => { 
-              console.log(res);
-              const {dispatch} = this.props;
-              dispatch({type : SIGN_IN, data : res})
-              this.props.login(res)
+              this.props.createBill(res)
               this.setState({loading : false})
-              // toastr.success("Đăng nhập thành công")
             }
           )
           .catch(err => {
@@ -53,7 +50,14 @@ class NormalLoginForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     const { currentTable, tables } = this.props
 
-    console.log(currentTable.id)
+    var tableItem = null
+    tables.forEach(item => {
+      if (item._id.toString() === currentTable._id.toString()) {
+        tableItem = item
+      }
+    })
+
+    console.log(tableItem)
 
     return (
       <Spin spinning={this.state.loading} tip="Loading...">
@@ -67,11 +71,11 @@ class NormalLoginForm extends React.Component {
             rules: [
               { required: true, message: 'Danh sách bàn không được để trống', type: 'array' },
             ],
-            initialValue: [currentTable.id]
+            initialValue: [currentTable._id]
           })(
             <Select mode="multiple" placeholder="Chọn bàn" optionLabelProp="label">
               {tables.map(item => {
-              return (<Option value={item.id} key={item.id} label={item.name}>{item.name}</Option>)
+              return (<Option value={item._id} key={item._id} label={item.name}>{item.name}</Option>)
               })}
             </Select>,
           )}

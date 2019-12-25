@@ -1,39 +1,41 @@
 import axios from 'axios';
+import { authHeader, getCookie } from '../utils/authHeader';
 
 export const services = {
-	login,
-  signUp,
-  getUser
+  login,
+  getTables,
+  createBills,
+  getBillDetails
 }
+
 
 function login(email, password) {
-  return axios({
+  return fetch('/user/login', {
     method : "POST",
     headers : { 'Content-Type': 'application/json' },
-    url : "https://toeic-practice.herokuapp.com/api/users/login",
-    data : JSON.stringify({ email, password })
+    body: JSON.stringify({ email, password })
   }).then(res => res)
   .catch(err=> {throw err})
 }
 
-function signUp(value) {
-  console.log(value)
-  return axios({
-    method : "POST",
-    headers : { 'Content-Type': 'application/json' },
-    url : "https://toeic-practice.herokuapp.com/api/users/signup",
-    data : value
-  }).then(res => res)
-  .catch(err=> {throw err})
-}
-
-function getUser(accessToken) {
-  return axios({
+function getTables() {
+  return fetch('/table/get-all', {
     method: 'GET',
-    url: `https://toeic-practice.herokuapp.com/api/users/`,
-    headers: {
-      authorization: `Bearer ${accessToken}`,
-    },
-  }).then(res => res)
-  .catch(err=> {throw err})
+    headers: authHeader()
+  }).then(res => res.json()).then(res => res).catch(err => {throw err})
+}
+
+function createBills(tables) {
+  return fetch('/bill/create', {
+    method: 'POST',
+    headers: authHeader(),
+    body: JSON.stringify({tables})
+  }).then(res => res.json()).then(res => res).catch(err => {throw err})
+}
+
+function getBillDetails(id) {
+  return fetch(`/bill/get/${id}`, {
+    method: 'GET',
+    headers: authHeader()
+  }).then(res => res.json()).then(res => res)
 }

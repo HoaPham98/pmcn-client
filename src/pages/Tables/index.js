@@ -8,78 +8,94 @@ import { Modal } from 'antd';
 import CreateBill from '../../components/CreateBill';
 import CreateOrder from '../../components/CreateOrder'
 
+import { services } from '../../services'
 const prefixCls = 'tables';
 
-const lstTables =Array.apply(null, Array(10)).map( (item, index) => {
-  return {
-    id: index+1,
-    name: "Bàn " + (index+1),
-    isAvailable: Math.random() >= 0.5
-  }
-})
+class Tables extends React.Component {
+    constructor(props) {
+        super(props)
 
-const Tables = ({}) => {
-
-  const renderTable = lstTables => {
-    let result = null;
-  
-    if (lstTables && lstTables.length > 0) {
-      result = lstTables.map((table, index) => <Table key={index} onClick={() => showModal(table)} {...table} />);
+        this.state = {
+            visible: false,
+            currentTable: null,
+            tables: []
+        }
+        this.showModal = this.showModal.bind(this)
+        this.handleOk = this.handleOk.bind(this)
+        this.handleCancel = this.handleCancel.bind(this)
     }
-  
-    return result;
-  };
 
-  const showModal = (table) => {
-    console.log("click on table", table.id)
-    setCurrentTable(table)
-    setVisible(true)
-  };
-  
-  const handleOk = e => {
-    console.log(e);
-    setVisible(false)
-  };
-  
-  const handleCancel = e => {
-    console.log(e);
-    setVisible(false)
-  };
-
-  const onCreateBill = (res) => {
-
-  }
-
-  const renderModal = () => {
-    if (currentTable != null) {
-      return currentTable.isAvailable ? <CreateBill currentTable={currentTable} tables={lstTables} createBill={onCreateBill}/> : <CreateOrder currentTable={currentTable} tables={lstTables} createBill={onCreateBill}/>
+    // Đây là hàm gọi 1 lần duy nhất khi bắt đầu load trang => Nên call api để fill data vào UI
+    componentDidMount() {
+        this.requestTablesStatus()
     }
-    return <br/>
-  }
 
-  
-  const [visible, setVisible] = useState(false);
-  const [currentTable, setCurrentTable] = useState(null);
-  console.log(lstTables)
-  return (
-    <div className={`${prefixCls}`}>
-      <div className={`${prefixCls}-content`}>
-        <h1>Danh sách bàn</h1>
-        <div className={`${prefixCls}-wrapped-list`}>{renderTable(lstTables)}</div>
-        <Modal
-          title="Menu"
-          visible={visible}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          footer={null}
-        >
-          {
-            renderModal()
-          }
-        </Modal>
-      </div>
-    </div>
-  );
+    // Đây là call API
+    requestTablesStatus() {
+        services.getTables().then(data => {
+            console.log("Da get xong ban", data.results)
+            this.setState({tables: data.results, visible: false})
+        })
+    }
+
+    renderTable = lstTables => {
+        let result = null;
+
+        if (lstTables && lstTables.length > 0) {
+            result = lstTables.map((table, index) => <Table key={index} onClick={() => this.showModal(table)} {...table} />);
+        }
+
+        return result;
+    };
+
+    showModal = (table) => {
+        console.log("click on table", table.id)
+        this.setState({currentTable: table, visible: true})
+    };
+
+    handleOk = e => {
+        this.setState({visible: false})
+    };
+
+    handleCancel = e => {
+        this.setState({visible: false})
+    };
+
+    onCreateBill = (res) => {
+        console.log(res)
+        this.requestTablesStatus()
+    }
+
+    renderModal = (currentTable) => {
+        const { tables } = this.state
+        if (currentTable != null) {
+            return currentTable.isAvailable ? <CreateBill currentTable={currentTable} tables={tables} createBill={this.onCreateBill} /> : <CreateOrder currentTable={currentTable} tables={tables} createBill={this.onCreateBill} />
+        }
+        return <br />
+    }
+
+    render() {
+        const { visible, currentTable, tables } = this.state;
+        return (
+            <div className={`${prefixCls}`}>
+                <div className={`${prefixCls}-content`}>
+                    <h1>Danh sách bàn</h1>
+                    <div className={`${prefixCls}-wrapped-list`}>{this.renderTable(tables)}</div>
+                    <Modal
+                        title="Menu"
+                        visible={visible}
+                        onOk={this.handleOk}
+                        onCancel={this.handleCancel}
+                        footer={null}
+                    >
+                        {
+                            this.renderModal(currentTable)
+                        }
+                    </Modal>
+                </div>
+            </div >
+        );
+    }
 };
 
 export default Tables;
