@@ -1,0 +1,48 @@
+.table {
+  padding: 0 2rem;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 2rem;
+
+  .table-wrap-image {
+    display: flex;
+    background-color: springgreen;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 10rem;
+    height: 10rem;
+
+    > svg {
+      transition: all 0.5s;
+      border-radius: 50%;
+      width: 13rem;
+      height: 7rem;
+    }
+  }
+
+  .isAvailable {
+    background-color: tomato;
+  }
+
+  &:hover {
+    .table-wrap-image {
+      > img {
+        transform: scale(1.5);
+      }
+    }
+  }
+
+  > h4 {
+    margin: 2rem 0 1rem;
+    text-align: center;
+    font-size: 2rem;
+  }
+}
+
+.pad {
+  margin: 1rem;
+}

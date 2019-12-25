@@ -10,10 +10,19 @@ const Tables = Loadable({
   loading: Loading,
 });
 
+const Order = Loadable({
+  loader: () => import('../pages/Order'),
+  loading: Loading,
+})
+
 const routes = [
   {
     path: '/',
     component: Tables,
+  },
+  {
+    path: '/order',
+    component: Order,
   },
   {
     path: '*',
