@@ -10,15 +10,26 @@ const Tables = Loadable({
   loading: Loading,
 });
 
+const Payment = Loadable({
+  loader: () => import('../pages/Payment'),
+  loading: Loading,
+});
+
+
 const routes = [
   {
     path: '/',
     component: Tables,
   },
   {
+    path: '/payment',
+    component: Payment,
+  },
+  {
     path: '*',
     component: () => <div>404!</div>,
   },
+
 ];
 
 export default () => (
