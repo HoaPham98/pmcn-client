@@ -7,6 +7,8 @@ import {
   Spin,
   Table, Tag, Divider
 } from 'antd';
+import { Link } from 'react-router-dom';
+
 import './style.scss';
 import { services } from '../../services'
 import { SIGN_IN } from '../../constants/ActionTypes'
@@ -17,7 +19,7 @@ const { Option } = Select;
 
 const fieldSorter = (fields) => (a, b) => fields.map(o => {
   let dir = 1;
-  if (o[0] === '-') { dir = -1; o=o.substring(1); }
+  if (o[0] === '-') { dir = -1; o = o.substring(1); }
   return a[o] > b[o] ? dir : a[o] < b[o] ? -(dir) : 0;
 }).reduce((p, n) => p ? p : n, 0);
 
@@ -30,7 +32,7 @@ const dishes = Array.apply(null, Array(20)).map((item, index) => {
     isDone: isDone,
     isCooked: isDone ? true : Math.random() >= 0.5
   }
-}).sort((a,b) => a.isDone - b.isDone || b.isCooked - a.isCooked)
+}).sort((a, b) => a.isDone - b.isDone || b.isCooked - a.isCooked)
 
 console.log("Dishes", dishes)
 
@@ -54,10 +56,11 @@ const columns = [
         console.log("món này đã xong", record)
       }
       return (
-      <span>
-        {record.idDone ? <Button>Đã phục vụ</Button> : (record.isCooked ? <Button>Phục vụ</Button> : <Button>Đang chờ nhà bếp</Button>)}
-      </span>
-    )},
+        <span>
+          {record.idDone ? <Button>Đã phục vụ</Button> : (record.isCooked ? <Button>Phục vụ</Button> : <Button>Đang chờ nhà bếp</Button>)}
+        </span>
+      )
+    },
   },
 ];
 
@@ -68,6 +71,20 @@ class NormalCreateOrderForm extends React.Component {
       loading: false
     }
   }
+
+  componentDidMount() {
+    this.requestBillDetail()
+  }
+
+  requestBillDetail() {
+    this.setState({loading: true})
+    const id = this.props.currentTable.currentBill
+    services.getBillDetails(id).then(data => {
+      console.log(data)
+      this.setState({loading: false})
+    })
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -102,25 +119,29 @@ class NormalCreateOrderForm extends React.Component {
 
     return (
       <Spin spinning={this.state.loading} tip="Loading...">
-        <Table columns={columns} dataSource={dishes} pagination={{ defaultPageSize: 5}} tableLayout='auto'/>
+        <Table columns={columns} dataSource={dishes} pagination={{ defaultPageSize: 5 }} tableLayout='auto' />
         <span>
-        <Button
-          type="primary"
-          htmlType="submit"
-          className="login-form-button"
-        >
-          Tạo hoá đơn
+          <Link to="/order">
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+            >
+              Tạo hoá đơn
           </Button>
-          <Divider type='vertical'/>
-          <Button
-          type="primary"
-          htmlType="submit"
-          className="login-form-button"
-        >
-          Thanh toán
+          </Link>
+          <Divider type='vertical' />
+          <Link to="/dashboard">
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+            >
+              Thanh toán
           </Button>
+          </Link>
         </span>
-        
+
       </Spin>
     );
   }

@@ -10,8 +10,14 @@ const Tables = Loadable({
   loading: Loading,
 });
 
+
 const Login = Loadable({
   loader: () => import('../pages/Login'),
+  loading: Loading,
+})
+
+const Order = Loadable({
+  loader: () => import('../pages/Order'),
   loading: Loading,
 })
 
@@ -23,6 +29,12 @@ const routes = [
   {
     path: '/',
     component: Tables,
+    isPrivate: true,
+  },
+  {
+    path: '/order',
+    component: Order,
+    isPrivate: true,
   },
   {
     path: '*',
