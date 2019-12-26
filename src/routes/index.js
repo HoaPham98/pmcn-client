@@ -45,12 +45,12 @@ const routes = [
     isPrivate: true,
   },
   {
-    path: '/order',
+    path: '/order/:id',
     component: Order,
     isPrivate: true,
   },
   {
-    path: '/pre_payment',
+    path: '/pre_payment/:id',
     component: Pre_payment,
   },
   {
