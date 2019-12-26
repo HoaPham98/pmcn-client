@@ -5,7 +5,10 @@ export const services = {
   login,
   getTables,
   createBills,
-  getBillDetails
+  getBillDetails,
+  getListDishDoing,
+  getFinishDish,
+  getStartDish
 }
 
 
@@ -33,9 +36,31 @@ function createBills(tables) {
   }).then(res => res.json()).then(res => res).catch(err => {throw err})
 }
 
+function getListDishDoing() {
+  return fetch(`/preparingDish/get-current`, {
+    method: 'GET',
+    headers: authHeader()
+  }).then(res => res.json()).then(res => res).catch( err=> {throw err})
+}
+
 function getBillDetails(id) {
   return fetch(`/bill/get/${id}`, {
     method: 'GET',
     headers: authHeader()
   }).then(res => res.json()).then(res => res)
 }
+
+function getFinishDish(id){
+  return fetch(`/preparingDish/finish/${id}`, {
+    method: 'PATCH',
+    headers: authHeader()
+  }).then(res => res.json()).then(res => res).catch( err=> {throw err})
+}
+
+function getStartDish(id){
+  return fetch(`/preparingDish/start/${id}`, {
+    method: 'PATCH',
+    headers: authHeader()
+  }).then(res => res.json()).then(res => res).catch( err=> {throw err})
+}
+

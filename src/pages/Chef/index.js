@@ -2,100 +2,104 @@ import React, { useState } from 'react';
 import { Table, Divider, Tag, Row, Col , Button} from 'antd';
 import './style.scss';
 import Item from 'antd/lib/list/Item';
+
+import { services } from '../../services'
 const prefixCls = 'chef';
-const dataDoing = [
-    {
-     
-      name: 'Mike',
-      number: 32,
-      time: '10 Downing Street',
-      id: 1,
-    },
-    {
-      name: 'John',
-      number: 42,
-      time: '10 Downing Street',
-      id: 2,
-    },
-  ];
-  
-  const dataTodo = [
-    {
-      
-      name: 'Mike',
-      number: 32,
-      time: '10 Downing Street',
-      id: 3,
-    },
-    {
-      
-      name: 'John',
-      number: 42,
-      time: '10 Downing Street',
-      id:4,
-    },
-  ];
+const dataDoing = [];
+  const dataTodo = [];
+  const dataDish = [];
   
   
   
 class Chef extends React.Component {
-    constructor(props){
-        super(props);
-        this.startClick = this.startClick.bind(this);
-        this.finishClick = this.finishClick.bind(this);
-        this.state = {
-            dataDoing: dataDoing,
-            dataTodo: dataTodo,
-        }
 
-        this.columns = [
-            {
-              title: 'Tên món ăn',
-              dataIndex: 'name',
-              key: 'name',
-              
-            },
-            {
-              title: 'Số lượng',
-              dataIndex: 'number',
-              key: 'number',
-            },
-            {
-              title: 'Thời gian bắt đầu',
-              dataIndex: 'time',
-              key: 'time',
-            },
-            {
-                title: 'Hoàn thành',
-                dataIndex: 'action',
-                render: (text, record) => <Button onClick = {(e)=> this.finishClick(record)}>Hoàn thành</Button>,
-         
-              },
-          ];
-
-          this.columns1 = [
-            {
-              title: 'Tên món ăn',
-              dataIndex: 'name',
-              key: 'name',
-              
-            },
-            {
-              title: 'Số lượng',
-              dataIndex: 'number',
-              key: 'number',
-            },
-            {
-                title: 'Bắt đầu',
-                dataIndex: 'action',
-                render: (text, record) => <Button onClick={(e)=>this.startClick(record)}>Bắt đầu</Button>,
-         
-              },
-          ];
-        
+  constructor(props){
+    super(props);
+    this.startClick = this.startClick.bind(this);
+    this.finishClick = this.finishClick.bind(this);
+    this.state = {
+        dataDish: [],
+        dataDoing: [],
+        dataTodo: [],
     }
+
+    this.columns = [
+        {
+          title: 'Tên món ăn',
+          dataIndex: 'dish.name',
+          key: 'dish.name',
+          
+        },
+        {
+          title: 'Số lượng',
+          dataIndex: 'quantity',
+          key: 'quantity',
+        },
+        {
+          title: 'Thời gian bắt đầu',
+          dataIndex: 'startAt',
+          key: 'startAt',
+        },
+        {
+            title: 'Hoàn thành',
+            dataIndex: 'action',
+            render: (text, record) => <Button onClick = {(e)=> this.finishClick(record)}>Hoàn thành</Button>,
+     
+          },
+      ];
+
+      this.columns1 = [
+        {
+          title: 'Tên món ăn',
+          dataIndex: 'dish.name',
+          key: 'dish.name',
+          
+        },
+        {
+          title: 'Số lượng',
+          dataIndex: 'quantity',
+          key: 'quantity',
+        },
+        {
+            title: 'Bắt đầu',
+            dataIndex: 'action',
+            render: (text, record) => <Button onClick = {(e)=>this.startClick(record)}>Bắt đầu</Button>,
+     
+          },
+      ];
+    
+}
+
+  componentDidMount() {
+    this.requestTablesStatus()
+  }
+
+  requestTablesStatus() {
+    services.getListDishDoing().then(data => {
+        console.log("get dish doing", data.results)
+        this.setState({dataDish: data.results, visible: false})
+
+        var {dataTodo} = this.state;
+        var {dataDoing} = this.state;
+        var {dataDish} = this.state;
+        
+        dataDoing = dataDish.filter(item => item.status === "preparing");
+        dataTodo = dataDish.filter(item => item.status === "pending")
+
+        this.setState({
+          dataDoing : dataDoing,
+          dataTodo : dataTodo,
+          visible: false
+        })
+
+       
+    })
+  } 
+
+    
     finishClick(dish){
-        console.log(dish)
+        console.log(dish._id)
+        services.getFinishDish(dish._id).then()
         var {dataDoing} = this.state;
     
         dataDoing.forEach(element => {
@@ -105,36 +109,34 @@ class Chef extends React.Component {
 
         this.setState({dataDoing : dataDoing})
 
-    }
-
+      }
+ 
     startClick(dish){
         console.log(dish)
-        var {dataTodo} = this.state;
-        var {dataDoing} = this.state;
-
-        dataTodo.forEach(element => {
-            if(element.id === dish.id)
-            dataTodo.pop(element)
-        });
-        var d = new Date();
-        var timenow = d.getMinutes()+":" + d.getHours()+ " " + d.getDate() +"-" + d.getMonth() +"-"+ d.getFullYear();
-
-        var newItem = {
-            id: dish.id,
-            number: dish.number,
-            name: dish.name,
-            time: timenow ,
-
-        };
-
-        dataDoing.push(newItem)
-        this.setState({
+        services.getStartDish(dish._id).then()
+        services.getListDishDoing().then(data => {
+          console.log("get dish doing", data.results)
+          this.setState({dataDish: data.results, visible: false})
+  
+          var {dataTodo} = this.state;
+          var {dataDoing} = this.state;
+          var {dataDish} = this.state;
+          
+          dataDoing = dataDish.filter(item => item.status === "preparing");
+          dataTodo = dataDish.filter(item => item.status === "pending")
+  
+          this.setState({
             dataDoing : dataDoing,
-            dataTodo: dataTodo
-        })
-
+            dataTodo : dataTodo,
+            visible: false
+          })
+  
+         
+      })
+         
     }
     render() {
+      
         return(
             <div className={`${prefixCls}`}>
             <div className={`${prefixCls}`}>
