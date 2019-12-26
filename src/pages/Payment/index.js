@@ -1,7 +1,8 @@
 import React from "react";
 import './style.scss';
-import {List, Avatar, Row, Col, Table, Form, Input, Button, Checkbox, Icon, Divider, InputNumber, Popconfirm} from 'antd';
+import {List, Avatar, Row, Col, Table, Form, Input, Button, Checkbox, Icon, Divider, InputNumber, Popconfirm, notification} from 'antd';
 import { services } from "../../services";
+import io from "socket.io-client";
 
 const prefixCls = 'payment';
 
@@ -32,7 +33,22 @@ class Payment extends React.Component {
             bills: [],
             currentBill: null
         }
+
+        this.socket = io('localhost:4000/cashier')
+
+        this.socket.on('done', (message) => {
+            this.openNotificationWithIcon(message)
+        }) 
     }
+
+    openNotificationWithIcon = message => {
+        this.requestPending()
+        notification['success']({
+          message: 'Có một món đã chuẩn bị xong',
+          description:
+            message,
+        });
+      };
 
     componentDidMount() {
         this.requestPending()

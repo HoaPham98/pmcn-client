@@ -13,7 +13,11 @@ export const services = {
   returnDish,
   confirmPayment,
   getPendingBills,
-  completeBill
+  completeBill,
+  getListDishDoing,
+  getFinishDish,
+  getStartDish
+
 }
 
 
@@ -39,6 +43,13 @@ function createBills(tables) {
     headers: authHeader(),
     body: JSON.stringify({tables})
   }).then(res => res.json()).then(res => res).catch(err => {throw err})
+}
+
+function getListDishDoing() {
+  return fetch(`/preparingDish/get-current`, {
+    method: 'GET',
+    headers: authHeader()
+  }).then(res => res.json()).then(res => res).catch( err=> {throw err})
 }
 
 function getBillDetails(id) {
@@ -104,4 +115,18 @@ function completeBill(id) {
     method: 'POST',
     headers: authHeader()
   }).then(res => res.json()).then(res => res)
+}
+
+function getFinishDish(id){
+  return fetch(`/preparingDish/finish/${id}`, {
+    method: 'PATCH',
+    headers: authHeader()
+  }).then(res => res.json()).then(res => res).catch( err=> {throw err})
+}
+
+function getStartDish(id){
+  return fetch(`/preparingDish/start/${id}`, {
+    method: 'PATCH',
+    headers: authHeader()
+  }).then(res => res.json()).then(res => res).catch( err=> {throw err})
 }
