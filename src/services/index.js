@@ -11,7 +11,9 @@ export const services = {
   createOrder,
   requestPayment,
   returnDish,
-  confirmPayment
+  confirmPayment,
+  getPendingBills,
+  completeBill
 }
 
 
@@ -86,6 +88,20 @@ function returnDish(billId, dishId, quantity) {
 function confirmPayment(billId) {
   return fetch(`/bill/checkout/${billId}`,{
     method: 'PATCH',
+    headers: authHeader()
+  }).then(res => res.json()).then(res => res)
+}
+
+function getPendingBills() {
+  return fetch('/bill/getLastestPending', {
+    method: 'GET',
+    headers: authHeader()
+  }).then(res => res.json()).then(res => res)
+}
+
+function completeBill(id) {
+  return fetch(`/bill/complete/${id}`, {
+    method: 'POST',
     headers: authHeader()
   }).then(res => res.json()).then(res => res)
 }
