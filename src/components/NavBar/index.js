@@ -31,9 +31,9 @@ const Navbar = ({ platform }) => {
         <Link to="/">Logo</Link>
       </div>
       <div className="menuCon">
-        <div className="leftMenu">
+        {/* <div className="leftMenu">
           <LeftNav />
-        </div>
+        </div> */}
         <div className="rightMenu">
           <RightNav mode={mode} />
         </div>
