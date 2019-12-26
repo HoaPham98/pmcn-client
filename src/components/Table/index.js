@@ -10,7 +10,6 @@ import changeToSlug from '../../utils/changeToSlug';
 const prefixCls = 'table';
 
 const Table = (data) => {
-  console.log(data)
   const {name, isAvailable} = data
   var classTableDiv = `${prefixCls}-wrap-image ${isAvailable ? '' : 'isAvailable'}`
   

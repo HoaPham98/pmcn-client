@@ -4,18 +4,10 @@ import './style.scss';
 
 import { Table, Icon, Row, Col, List, Button } from 'antd';
 import Dish from "../../components/Dish";
+import { services } from '../../services';
 
 
 const prefixCls = 'order';
-
-
-
-const dishes = Array.apply(null, Array(10)).map( (item, index) => {
-    return {
-        id: index+1,
-        name: "Món " + (index+1)
-    }
-})
 
 
 class Order extends React.Component {
@@ -24,9 +16,13 @@ class Order extends React.Component {
 
         this.handleClick = this.handleClick.bind(this);
         this.deleteClick = this.deleteClick.bind(this);
+        this.handleCreate = this.handleCreate.bind(this);
         this.state = {
-            data: []
+            data: [],
+            dishes: []
         }
+
+        this.billId = this.props.match.params.id
 
         this.columns = [
             { title: 'Món', dataIndex: 'name', key: 'name' },
@@ -40,6 +36,17 @@ class Order extends React.Component {
         ];
     }
 
+    componentDidMount() {
+        this.requestGetListDishes()
+    }
+
+    requestGetListDishes() {
+        services.getListDishes().then(data => {
+            console.log('DANH SACH MON AN', data)
+            this.setState({dishes: data.results})
+        })
+    }
+
     deleteClick(dish) {
         var {data} = this.state
 
@@ -50,17 +57,16 @@ class Order extends React.Component {
 
     handleClick(dish) {
         var { data } = this.state
-        console.log("Truoc", data)
         var isAdded = false
         data.forEach(item => {
-            if (dish.id === item.id) {
+            if (dish._id.toString() === item.id.toString()) {
                 item.sl += 1
                 isAdded = true
             }
         })
         if (!isAdded) {
             var newItem = {
-                id: dish.id,
+                id: dish._id,
                 name: dish.name,
                 sl: 1
             }
@@ -69,8 +75,23 @@ class Order extends React.Component {
         this.setState({data : data})
     }
 
+    handleCreate() {
+        const body = this.state.data.map(item => {
+            return {
+                dish: item.id,
+                quantity: item.sl
+            }
+        })
+
+        services.createOrder(this.billId, body).then(res => {
+            console.log(res)
+            this.props.history.goBack();
+        }).catch(err => console.log('LỖI', err))
+    }
+
 
   render() {
+    const { dishes } = this.state
 
     return (
         <div className={`${prefixCls}`}>
@@ -99,7 +120,7 @@ class Order extends React.Component {
                                   columns={this.columns}
                                   dataSource={this.state.data}
                               />
-                              <Button>Thanh toán</Button>
+                              <Button onClick={this.handleCreate}>Thêm order</Button>
                           </div>
                       </Col>
                   </Row>
