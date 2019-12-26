@@ -52,14 +52,17 @@ const routes = [
   {
     path: '/pre_payment/:id',
     component: Pre_payment,
+    isPrivate: true,
   },
   {
     path: '/payment',
     component: Payment,
+    isPrivate: true,
   },
   {
     path: '/chef',
     component: Chef,
+    isPrivate: true,
   },
   {
     path: '*',
