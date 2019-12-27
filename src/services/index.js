@@ -16,7 +16,9 @@ export const services = {
   completeBill,
   getListDishDoing,
   getFinishDish,
-  getStartDish
+  getStartDish,
+  createDish,
+  deleteDish
 
 }
 
@@ -129,4 +131,19 @@ function getStartDish(id){
     method: 'PATCH',
     headers: authHeader()
   }).then(res => res.json()).then(res => res).catch( err=> {throw err})
+}
+
+function createDish(name, price, unit, availableTime, isAvailable ) {
+  return fetch('dish/create', {
+    method: 'POST',
+    headers: authHeader(),
+    body: JSON.stringify({name, price, unit, availableTime, isAvailable})
+  }).then(res => res.json()).then(res => res).catch(err => {throw err})
+}
+
+function deleteDish(id) {
+  return fetch(`/dish/delete/${id}`, {
+    method: 'DELETE',
+    headers: authHeader()
+  }).then(res => res.json()).then(res => res)
 }
