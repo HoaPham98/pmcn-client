@@ -11,7 +11,9 @@ export const services = {
   createOrder,
   requestPayment,
   returnDish,
-  confirmPayment
+  confirmPayment,
+  createDish,
+  deleteDish
 }
 
 
@@ -86,6 +88,21 @@ function returnDish(billId, dishId, quantity) {
 function confirmPayment(billId) {
   return fetch(`/bill/checkout/${billId}`,{
     method: 'PATCH',
+    headers: authHeader()
+  }).then(res => res.json()).then(res => res)
+}
+
+function createDish(name, price, unit, availableTime, isAvailable ) {
+  return fetch('dish/create', {
+    method: 'POST',
+    headers: authHeader(),
+    body: JSON.stringify({name, price, unit, availableTime, isAvailable})
+  }).then(res => res.json()).then(res => res).catch(err => {throw err})
+}
+
+function deleteDish(id) {
+  return fetch(`/dish/delete/${id}`, {
+    method: 'DELETE',
     headers: authHeader()
   }).then(res => res.json()).then(res => res)
 }
