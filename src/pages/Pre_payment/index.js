@@ -91,7 +91,7 @@ class Pre_payment extends React.Component {
             };
 
             return (
-                <Form onSubmit={handleSubmit} className="login-form">
+                <Form onSubmit={handleSubmit}>
                     <Form.Item>
                         {props.form.getFieldDecorator('username', {
                             rules: [{ required: true, type: "number", min: 1, max: 12, message: "Lỗi rồi" }],

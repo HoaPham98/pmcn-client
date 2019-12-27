@@ -34,6 +34,11 @@ const Chef = Loadable({
   loading: Loading,
 });
 
+const Admin = Loadable({
+  loader: () => import('../pages/Admin'),
+  loading: Loading,
+});
+
 const routes = [
   {
     path: '/login',
@@ -62,6 +67,11 @@ const routes = [
   {
     path: '/chef',
     component: Chef,
+    isPrivate: true,
+  },
+  {
+    path: '/admin',
+    component: Admin,
     isPrivate: true,
   },
   {
